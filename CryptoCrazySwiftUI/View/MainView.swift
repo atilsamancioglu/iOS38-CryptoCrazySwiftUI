@@ -18,6 +18,7 @@ struct MainView: View {
     
     var body: some View {
         NavigationView{
+        
             
             List(cryptoListViewModel.cryptoList,id:\.id) { crypto in
           
@@ -34,7 +35,19 @@ struct MainView: View {
 
                 }
             
-        }.navigationTitle(Text("Crypto Crazy"))
+            }.toolbar(content: {
+                Button {
+                    //
+                    Task.init {
+                        //cryptoListViewModel.cryptoList = []
+                        await cryptoListViewModel.downloadCryptosContinuation(url: URL(string: "https://raw.githubusercontent.com/atilsamancioglu/K21-JSONDataSet/master/crypto.json")!)
+                    }
+                } label: {
+                    Text("Refresh")
+                }
+
+            })
+            .navigationTitle(Text("Crypto Crazy"))
             
         }.task{
             /*

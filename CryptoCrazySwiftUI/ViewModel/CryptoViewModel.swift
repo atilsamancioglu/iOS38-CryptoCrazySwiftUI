@@ -7,6 +7,8 @@
 
 import Foundation
 
+//Every property of this will be called on Main Thread
+@MainActor
 class CryptoListViewModel : ObservableObject {
     
     @Published var cryptoList = [CryptoViewModel]()
@@ -29,9 +31,12 @@ class CryptoListViewModel : ObservableObject {
     func downloadCryptosContinuation(url : URL) async {
         do {
             let cryptos = try await webservice.downloadCurrenciesContinuation(url: url)
+            self.cryptoList = cryptos.map(CryptoViewModel.init)
+            /*
             DispatchQueue.main.async {
                 self.cryptoList = cryptos.map(CryptoViewModel.init)
             }
+             */
         } catch {
             print(error)
         }
