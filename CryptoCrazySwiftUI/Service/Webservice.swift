@@ -9,6 +9,17 @@ import Foundation
 
 class Webservice {
     
+    
+    func downloadCurrenciesAsync(url: URL) async throws -> [CryptoCurrency] {
+        
+        let (data, response) = try await URLSession.shared.data(from: url)
+        
+        let currencies = try? JSONDecoder().decode([CryptoCurrency].self, from: data)
+        
+        return currencies ?? []
+    }
+    
+    /*
     func downloadCurrencies(url: URL, completion: @escaping (Result<[CryptoCurrency]?,DownloaderError>) -> Void) {
         
         URLSession.shared.dataTask(with: url) { data, response, error in
@@ -29,6 +40,7 @@ class Webservice {
         }.resume()
         
     }
+     */
     
 }
 
