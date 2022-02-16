@@ -9,7 +9,7 @@ import Foundation
 
 class Webservice {
     
-    
+    /*
     func downloadCurrenciesAsync(url: URL) async throws -> [CryptoCurrency] {
         
         let (data, response) = try await URLSession.shared.data(from: url)
@@ -18,8 +18,24 @@ class Webservice {
         
         return currencies ?? []
     }
+     */
     
-    /*
+    func downloadCurrenciesContinuation(url : URL) async throws -> [CryptoCurrency] {
+        //this will allow to resume from the suspended state
+        try await withCheckedThrowingContinuation { continuation in
+            downloadCurrencies(url: url) { result in
+                switch result {
+                case .success(let cryptos):
+                    continuation.resume(returning: cryptos ?? [])
+                    
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+    
+    
     func downloadCurrencies(url: URL, completion: @escaping (Result<[CryptoCurrency]?,DownloaderError>) -> Void) {
         
         URLSession.shared.dataTask(with: url) { data, response, error in
@@ -40,7 +56,7 @@ class Webservice {
         }.resume()
         
     }
-     */
+     
     
 }
 

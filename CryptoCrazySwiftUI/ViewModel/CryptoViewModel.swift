@@ -13,9 +13,22 @@ class CryptoListViewModel : ObservableObject {
     
     let webservice = Webservice()
     
+    /*
     func downloadCryptosAsync(url : URL) async {
         do {
         let cryptos = try await webservice.downloadCurrenciesAsync(url: url)
+            DispatchQueue.main.async {
+                self.cryptoList = cryptos.map(CryptoViewModel.init)
+            }
+        } catch {
+            print(error)
+        }
+    }
+     */
+    
+    func downloadCryptosContinuation(url : URL) async {
+        do {
+            let cryptos = try await webservice.downloadCurrenciesContinuation(url: url)
             DispatchQueue.main.async {
                 self.cryptoList = cryptos.map(CryptoViewModel.init)
             }
